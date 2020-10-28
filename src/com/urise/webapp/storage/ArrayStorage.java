@@ -8,25 +8,25 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[10_000];
     int size = 0;
 
     public void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, size - 1, null);
         size = 0;
     }
 
     public void update(Resume resume) {
-        int index = indexOfResume(resume.uuid);
+        int index = getIndexOfResume(resume.getUuid());
         if (index == -1) {
-            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", resume.uuid);
+            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", resume.getUuid());
         } else {
             storage[index] = resume;
         }
     }
 
     public void save(Resume resume) {
-        int index = indexOfResume(resume.uuid);
+        int index = getIndexOfResume(resume.getUuid());
         if (index == -1) {
             if (size < storage.length) {
                 storage[size++] = resume;
@@ -34,22 +34,21 @@ public class ArrayStorage {
                 System.out.println("Error. storage is crowded.");
             }
         } else {
-            update(resume);
+            System.out.printf("Error. Resume with UUID: %s already exists in storage.\n", resume.getUuid());
         }
     }
 
     public Resume get(String uuid) {
-        int index = indexOfResume(uuid);
+        int index = getIndexOfResume(uuid);
         if (index == -1) {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
             return null;
-        } else {
-            return storage[index];
         }
+        return storage[index];
     }
 
     public void delete(String uuid) {
-        int index = indexOfResume(uuid);
+        int index = getIndexOfResume(uuid);
         if (index == -1) {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
         } else {
@@ -59,9 +58,9 @@ public class ArrayStorage {
         }
     }
 
-    private int indexOfResume(String uuid) {
+    private int getIndexOfResume(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
         }
