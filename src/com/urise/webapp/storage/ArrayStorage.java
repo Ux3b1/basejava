@@ -17,19 +17,17 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (resumeNotPresent(resume.uuid)) {
+        int index = indexOfResume(resume.uuid);
+        if (index == -1) {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", resume.uuid);
-            return;
-        }
-        for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(resume.uuid)) {
-                storage[i] = resume;
-            }
+        } else {
+            storage[index] = resume;
         }
     }
 
     public void save(Resume resume) {
-        if (resumeNotPresent(resume.uuid)) {
+        int index = indexOfResume(resume.uuid);
+        if (index == -1) {
             if (size < storage.length) {
                 storage[size++] = resume;
             } else {
@@ -41,39 +39,33 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (resumeNotPresent(uuid)) {
+        int index = indexOfResume(uuid);
+        if (index == -1) {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
             return null;
+        } else {
+            return storage[index];
         }
-        for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                return storage[i];
-            }
-        }
-        return null;
     }
 
     public void delete(String uuid) {
-        if (resumeNotPresent(uuid)) {
+        int index = indexOfResume(uuid);
+        if (index == -1) {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
-            return;
-        }
-        for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
-            }
+        } else {
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
         }
     }
 
-    private boolean resumeNotPresent(String uuid) {
+    private int indexOfResume(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                return false;
+                return i;
             }
         }
-        return true;
+        return -1;
     }
 
     /**
