@@ -8,9 +8,10 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
-    @Override
-    public void clear() {
 
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     @Override
@@ -25,12 +26,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void delete(String uuid) {
-
     }
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return Arrays.copyOf(storage, size);
     }
 
     @Override
