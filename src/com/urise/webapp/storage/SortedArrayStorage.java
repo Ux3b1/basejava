@@ -19,14 +19,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
-        } else {
-            remap(index, true);
-            size--;
-        }
+    protected void deleteResume(int index) {
+        remap(index, true);
+        size--;
     }
 
     @Override

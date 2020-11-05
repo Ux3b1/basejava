@@ -30,8 +30,6 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    protected abstract void saveResume(int index, Resume resume);
-
     @Override
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
@@ -52,6 +50,18 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     @Override
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
+        } else {
+            deleteResume(index);
+        }
+    }
+
+    protected abstract void deleteResume(int index);
+
+    @Override
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
@@ -59,6 +69,8 @@ public abstract class AbstractArrayStorage implements Storage {
     public int size() {
         return size;
     }
+
+    protected abstract void saveResume(int index, Resume resume);
 
     protected abstract int getIndex(String uuid);
 }
