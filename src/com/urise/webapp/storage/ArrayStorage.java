@@ -10,17 +10,8 @@ import java.util.Arrays;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            if (size < storage.length) {
-                storage[size++] = resume;
-            } else {
-                System.out.println("Error. storage is crowded.");
-            }
-        } else {
-            System.out.printf("Error. Resume with UUID: %s already exists in storage.\n", resume.getUuid());
-        }
+    protected void saveResume(int index, Resume resume) {
+        storage[size++] = resume;
     }
 
     @Override

@@ -17,6 +17,22 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     @Override
+    public void save(Resume resume) {
+        int index = getIndex(resume.getUuid());
+        if (index <= -1) {
+            if (size < storage.length) {
+                saveResume(index, resume);
+            } else {
+                System.out.println("Error. storage is crowded.");
+            }
+        } else {
+            System.out.printf("Error. Resume with UUID: %s already exists in storage.\n", resume.getUuid());
+        }
+    }
+
+    protected abstract void saveResume(int index, Resume resume);
+
+    @Override
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {

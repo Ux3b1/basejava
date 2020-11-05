@@ -11,20 +11,11 @@ import java.util.Comparator;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index <= -1) {
-            index = -(index) - 1;
-            if (size < storage.length) {
-                remap(index, false);
-                storage[index] = resume;
-                size++;
-            } else {
-                System.out.println("Error. storage is crowded.");
-            }
-        } else {
-            System.out.printf("Error. Resume with UUID: %s already exists in storage.\n", resume.getUuid());
-        }
+    protected void saveResume(int index, Resume resume) {
+        index = -(index) - 1;
+        remap(index, false);
+        storage[index] = resume;
+        size++;
     }
 
     @Override
