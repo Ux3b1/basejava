@@ -10,22 +10,6 @@ import java.util.Arrays;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void clear() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
-
-    @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index == -1) {
-            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", resume.getUuid());
-        } else {
-            storage[index] = resume;
-        }
-    }
-
-    @Override
     public void save(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index == -1) {
@@ -37,16 +21,6 @@ public class ArrayStorage extends AbstractArrayStorage {
         } else {
             System.out.printf("Error. Resume with UUID: %s already exists in storage.\n", resume.getUuid());
         }
-    }
-
-    @Override
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
-            return null;
-        }
-        return storage[index];
     }
 
     @Override
@@ -69,15 +43,5 @@ public class ArrayStorage extends AbstractArrayStorage {
             }
         }
         return -1;
-    }
-
-    @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
-    @Override
-    public int size() {
-        return size;
     }
 }
