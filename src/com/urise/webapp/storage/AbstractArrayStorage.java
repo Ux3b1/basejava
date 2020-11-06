@@ -58,6 +58,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
         } else {
             deleteResume(index);
+            storage[size - 1] = null;
             size--;
         }
     }

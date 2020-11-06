@@ -31,10 +31,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     private void remap(int index, boolean delete) {
         if (delete) {
-            for (int i = index; i < size - 1; i++) {
-                storage[i] = storage[i + 1];
-                storage[i + 1] = null;
-            }
+            if (size - 1 - index >= 0) System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
         } else {
             if (size - index >= 0) {
                 System.arraycopy(storage, index, storage, index + 1, size - index);
