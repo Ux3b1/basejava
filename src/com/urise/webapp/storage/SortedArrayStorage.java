@@ -15,13 +15,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         index = -(index) - 1;
         remap(index, false);
         storage[index] = resume;
-        size++;
     }
 
     @Override
     protected void deleteResume(int index) {
         remap(index, true);
-        size--;
     }
 
     @Override

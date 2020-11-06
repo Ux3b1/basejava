@@ -22,6 +22,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index <= -1) {
             if (size < storage.length) {
                 saveResume(index, resume);
+                size++;
             } else {
                 System.out.println("Error. storage is crowded.");
             }
@@ -37,6 +38,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", resume.getUuid());
         } else {
             storage[index] = resume;
+
         }
     }
 
@@ -56,6 +58,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.printf("Error. Resume with UUID: %s not found in storage.\n", uuid);
         } else {
             deleteResume(index);
+            size--;
         }
     }
 
