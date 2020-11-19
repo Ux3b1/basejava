@@ -9,16 +9,20 @@ import java.util.Comparator;
  * Array based storage for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
-
     @Override
-    protected void saveResume(int index, Resume resume) {
+    protected void saveResumeArray(int index, Resume resume) {
         index = -(index) - 1;
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected Resume getResume(int index, String uuid) {
+        return storage[index];
+    }
+
+    @Override
+    protected void deleteResumeArray(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
     }
 

@@ -1,13 +1,11 @@
 package com.urise.webapp.storage;
 
-import com.urise.webapp.exception.ExistStorageException;
-import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -20,52 +18,26 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     @Override
-    public void save(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            if (size < storage.length) {
-                saveResume(index, resume);
-                size++;
-            } else {
-                throw new StorageException("Error. storage is crowded.", resume.getUuid());
-            }
-        } else {
-            throw new ExistStorageException(resume.getUuid());
-        }
+    protected void deleteResume(int index, String uuid) {
+        deleteResumeArray(index);
+        storage[size - 1] = null;
+        size--;
     }
 
     @Override
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        } else {
-            storage[index] = resume;
-
-        }
-    }
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return storage[index];
+    protected void updateResume(int index, Resume resume) {
+        storage[index] = resume;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
+    protected void saveResume(int index, Resume resume) {
+        if (size < storage.length) {
+            saveResumeArray(index, resume);
+            size++;
         } else {
-            deleteResume(index);
-            storage[size - 1] = null;
-            size--;
+            throw new StorageException("Error. storage is crowded.", resume.getUuid());
         }
     }
-
-    protected abstract void deleteResume(int index);
 
     @Override
     public Resume[] getAll() {
@@ -76,7 +48,7 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
-    protected abstract void saveResume(int index, Resume resume);
+    protected abstract void saveResumeArray(int index, Resume resume);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void deleteResumeArray(int index);
 }
