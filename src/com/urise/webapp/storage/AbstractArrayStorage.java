@@ -18,25 +18,30 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void deleteResume(int index, String uuid) {
-        deleteResumeArray(index);
+    protected void doUpdate(Resume resume, Object index) {
+        storage[(Integer) index] = resume;
+    }
+
+    @Override
+    protected void doDelete(Object index) {
+        fillDeletedElement((Integer) index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateResume(int index, Resume resume) {
-        storage[index] = resume;
+    protected void doSave(Resume resume, Object index) {
+        if (size == STORAGE_LIMIT) {
+            throw new StorageException("Error. storage is crowded.", resume.getUuid());
+        } else {
+            insertElement(resume , (Integer) index);
+            size++;
+        }
     }
 
     @Override
-    protected void saveResume(int index, Resume resume) {
-        if (size < storage.length) {
-            saveResumeArray(index, resume);
-            size++;
-        } else {
-            throw new StorageException("Error. storage is crowded.", resume.getUuid());
-        }
+    protected Resume doGet(Object index) {
+        return storage[(Integer) index];
     }
 
     @Override
@@ -48,7 +53,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected abstract void saveResumeArray(int index, Resume resume);
+    @Override
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
+    }
 
-    protected abstract void deleteResumeArray(int index);
+    protected abstract void insertElement(Resume resume, int index);
+
+    protected abstract void fillDeletedElement(int index);
+
+    @Override
+    protected abstract Integer getSearchKey(String uuid);
 }
