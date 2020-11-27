@@ -14,7 +14,7 @@ public class MainReflection {
         System.out.println(field.getName());
         System.out.println(field.get(r));
         field.set(r,"new_uuid");
-        // TODO : invoke r.toString via reflection
+
         try {
             System.out.println("======");
             Method method = r.getClass().getDeclaredMethod("toString");

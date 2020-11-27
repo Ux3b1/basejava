@@ -2,15 +2,17 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    private Storage storage;
+    protected Storage storage;
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -44,18 +46,6 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_4);
         assertSize(4);
         assertGet(RESUME_4);
-    }
-
-    @Test(expected = StorageException.class)
-    public void overFlowStorage() {
-        try {
-            for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException thrown) {
-            Assert.fail("Exception expected before main test.");
-        }
-        storage.save(new Resume());
     }
 
     @Test
@@ -107,6 +97,15 @@ public abstract class AbstractStorageTest {
         assertEquals(RESUME_1,result[0]);
         assertEquals(RESUME_2,result[1]);
         assertEquals(RESUME_3,result[2]);
+    }
+
+    @Test
+    public void getAllSorted() {
+        List<Resume> result = storage.getAllSorted();
+        assertEquals(3,result.size());
+        assertEquals(RESUME_1,result.get(0));
+        assertEquals(RESUME_2,result.get(1));
+        assertEquals(RESUME_3,result.get(2));
     }
 
     @Test

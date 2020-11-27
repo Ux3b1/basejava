@@ -10,6 +10,7 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
+    private String fullName;
 
     public Resume() {
         this(UUID.randomUUID().toString());
@@ -35,7 +36,6 @@ public class Resume {
     public int hashCode() {
         return Objects.hash(uuid);
     }
-
 
     @Override
     public String toString() {
