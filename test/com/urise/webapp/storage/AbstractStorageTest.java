@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -19,13 +20,13 @@ public abstract class AbstractStorageTest {
     }
 
     private static final String UUUD_1 = "uuid1";
-    private static final Resume RESUME_1 = new Resume(UUUD_1);
+    private static final Resume RESUME_1 = new Resume(UUUD_1, "Name1");
     private static final String UUUD_2 = "uuid2";
-    private static final Resume RESUME_2 = new Resume(UUUD_2);
+    private static final Resume RESUME_2 = new Resume(UUUD_2, "Name2");
     private static final String UUUD_3 = "uuid3";
-    private static final Resume RESUME_3 = new Resume(UUUD_3);
+    private static final Resume RESUME_3 = new Resume(UUUD_3, "Name3");
     private static final String UUUD_4 = "uuid4";
-    private static final Resume RESUME_4 = new Resume(UUUD_4);
+    private static final Resume RESUME_4 = new Resume(UUUD_4, "Name4");
 
     @Before
     public void setUp() {
@@ -50,10 +51,10 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume("uuid1");
-        Resume resume1 = storage.get("uuid1");
+        Resume resume = new Resume("uuid1", "New Name");
         storage.update(resume);
-        Assert.assertEquals(resume, resume1);
+        Resume resume1 = storage.get("uuid1");
+        assertEquals(resume, resume1);
     }
 
     @Test
@@ -91,21 +92,9 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] result = storage.getAll();
-        assertEquals(3,result.length);
-        assertEquals(RESUME_1,result[0]);
-        assertEquals(RESUME_2,result[1]);
-        assertEquals(RESUME_3,result[2]);
-    }
-
-    @Test
     public void getAllSorted() {
         List<Resume> result = storage.getAllSorted();
-        assertEquals(3,result.size());
-        assertEquals(RESUME_1,result.get(0));
-        assertEquals(RESUME_2,result.get(1));
-        assertEquals(RESUME_3,result.get(2));
+        assertEquals(result, Arrays.asList(RESUME_1, RESUME_2, RESUME_3));
     }
 
     @Test

@@ -4,7 +4,7 @@ import com.urise.webapp.model.Resume;
 
 import java.util.*;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     List<Resume> resumeList = new ArrayList<>();
 
     @Override
@@ -13,23 +13,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object index) {
-        resumeList.set((Integer) index, resume);
+    protected void doUpdate(Resume resume, Integer index) {
+        resumeList.set(index, resume);
     }
 
     @Override
-    protected void doSave(Resume resume, Object index) {
+    protected void doSave(Resume resume, Integer index) {
         resumeList.add(resume);
     }
 
     @Override
-    protected Resume doGet(Object index) {
-        return resumeList.get((Integer) index);
+    protected Resume doGet(Integer index) {
+        return resumeList.get(index);
     }
 
     @Override
-    protected void doDelete(Object searchKey) {
-        resumeList.remove(((Integer) searchKey).intValue());
+    protected void doDelete(Integer searchKey) {
+        resumeList.remove(searchKey.intValue());
     }
 
     @Override
@@ -38,15 +38,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return resumeList.toArray(new Resume[0]);
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(resumeList);
-        list.sort(Comparator.comparing(Resume::getUuid));
-        return list;
+    public List<Resume> doCopyAll() {
+        return new ArrayList<>(resumeList);
     }
 
     protected Integer getSearchKey(String uuid) {
@@ -59,7 +52,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
+    protected boolean isExist(Integer searchKey) {
         return searchKey != null;
     }
 }

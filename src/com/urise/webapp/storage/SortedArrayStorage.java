@@ -9,6 +9,8 @@ import java.util.Comparator;
  * Array based storage for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
+    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
+
     @Override
     protected void insertElement(Resume resume, int index) {
         index = -(index) - 1;
@@ -23,8 +25,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey, Comparator.comparing(Resume::getUuid));
+        Resume searchKey = new Resume(uuid, "dummy");
+        return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 }
 

@@ -16,10 +16,10 @@ public class MainCollections {
     private static final Resume RESUME_4;
 
     static {
-            RESUME_1 = new Resume(UUUD_1);
-            RESUME_2 = new Resume(UUUD_2);
-            RESUME_3 = new Resume(UUUD_3);
-            RESUME_4 = new Resume(UUUD_4);
+            RESUME_1 = new Resume(UUUD_1, "Name1");
+            RESUME_2 = new Resume(UUUD_2, "Name2");
+            RESUME_3 = new Resume(UUUD_3, "Name3");
+            RESUME_4 = new Resume(UUUD_4, "Name4");
     }
 
     public static void main(String[] args) {
