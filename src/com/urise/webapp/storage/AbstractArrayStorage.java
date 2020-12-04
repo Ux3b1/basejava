@@ -3,7 +3,8 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10_000;
@@ -34,7 +35,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Error. storage is crowded.", resume.getUuid());
         } else {
-            insertElement(resume , index);
+            insertElement(resume, index);
             size++;
         }
     }
