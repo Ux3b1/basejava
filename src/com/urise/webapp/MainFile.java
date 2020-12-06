@@ -10,10 +10,10 @@ public class MainFile {
         File dir = new File("./src/com/urise/webapp");
         System.out.println(dir.getCanonicalPath());
         System.out.println(dir.isDirectory());
-        printDirectoryDepply(dir);
+        printDirectoryDepply(dir, "");
     }
 
-    public static void printDirectoryDepply(File dir) {
+    public static void printDirectoryDepply(File dir, String offset) {
         File[] files = dir.listFiles();
 
         if (files == null) {
@@ -22,10 +22,10 @@ public class MainFile {
 
         for (File file : files) {
             if (file.isDirectory()) {
-                System.out.println("./Directory: " + file.getName());
-                printDirectoryDepply(file);
+                System.out.println(offset + "D: " + file.getName());
+                printDirectoryDepply(file, offset + " ");
             } else {
-                System.out.println("--File: " + file.getName());
+                System.out.println("F: " + file.getName());
             }
         }
     }

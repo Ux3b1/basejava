@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public abstract class AbstractFileStorage extends AbstractStorage<File> implements FilePathStorage{
     protected File directory;
     private int size;
 
@@ -23,15 +23,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     protected abstract Resume doRead(InputStream is) throws IOException;
 
-    public AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "directory must not be null");
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
+    public AbstractFileStorage(String dir) {
+        Objects.requireNonNull(dir, "directory must not be null");
+        File incomingDirectory = new File(dir);
+        if (!incomingDirectory.isDirectory()) {
+            throw new IllegalArgumentException(incomingDirectory.getAbsolutePath() + "is not directory");
         }
-        if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + "is not readable/writable");
+        if (!incomingDirectory.canRead() || !incomingDirectory.canWrite()) {
+            throw new IllegalArgumentException(incomingDirectory.getAbsolutePath() + "is not readable/writable");
         }
-        this.directory = directory;
+        this.directory = incomingDirectory;
     }
 
     @Override
@@ -41,13 +42,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doSave(Resume resume, File file) {
+        boolean isCreated = false;
         try {
-            file.createNewFile();
+            isCreated = file.createNewFile();
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + file.getAbsolutePath(), resume.getUuid(), e);
         }
-        doUpdate(resume, file);
-        size++;
+        if (isCreated) {
+            doUpdate(resume, file);
+            size++;
+        }
     }
 
     @Override

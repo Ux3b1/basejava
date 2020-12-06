@@ -13,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\Users\\odmen\\Desktop\\java\\basejava\\storage");
+    protected static final String STORAGE_DIR = "C:\\Users\\odmen\\Desktop\\java\\basejava\\storage";
     protected Storage storage;
 
     private static final String UUUD_1 = "uuid1";
