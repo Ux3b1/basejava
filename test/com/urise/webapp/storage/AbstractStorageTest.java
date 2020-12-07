@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static final String STORAGE_DIR = "C:\\Users\\odmen\\Desktop\\java\\basejava\\storage";
+    protected static final String STORAGE_DIR = "storage";
     protected Storage storage;
 
     private static final String UUUD_1 = "uuid1";

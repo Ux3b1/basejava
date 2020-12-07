@@ -2,29 +2,25 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serializer.StreamSerializer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> implements FilePathStorage {
+public class PathStorage extends AbstractStorage<Path> {
     protected Path directory;
     private int size;
+    private StreamSerializer streamSerializer;
 
-    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
-
-    protected abstract Resume doRead(InputStream is) throws IOException;
-
-    public AbstractPathStorage(String dir) {
+    public PathStorage(String dir, StreamSerializer streamSerializer) {
         Objects.requireNonNull(dir, "directory must not be null");
+        this.streamSerializer = streamSerializer;
         Path incomingDirectory = Paths.get(dir);
         if (!Files.isDirectory(incomingDirectory) || !Files.isWritable(incomingDirectory)) {
             throw new IllegalArgumentException(dir + "is not directory or is not writable");
@@ -42,7 +38,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("Couldn't create Path " + path.getFileName().toString(), resume.getUuid(), e);
+            throw new StorageException("Couldn't create Path " + path, getFileName(path), e);
         }
         doUpdate(resume, path);
         size++;
@@ -51,7 +47,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            streamSerializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error", resume.getUuid(), e);
         }
@@ -63,7 +59,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
             Files.delete(path);
             size--;
         } catch (IOException e) {
-            throw new StorageException("Path delete error", path.getFileName().toString());
+            throw new StorageException("Path delete error", getFileName(path), e);
         }
 
     }
@@ -71,38 +67,44 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return streamSerializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Couldn't create Path " + path.getFileName().toString(), path.getFileName().toString(), e);
+            throw new StorageException("Couldn't create Path " + path, getFileName(path), e);
         }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        try {
-            return Files.list(directory).map(this::doGet).collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new StorageException("Path read doCopy error", null);
-        }
+        return getFileList()
+                .map(this::doGet)
+                .collect(Collectors.toList());
     }
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.exists(path);
+        return Files.isRegularFile(path);
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::doDelete);
-        } catch (IOException e) {
-            throw new StorageException("Path clear error", null);
-        }
+        getFileList().forEach(this::doDelete);
         size = 0;
     }
 
     @Override
     public int size() {
         return size;
+    }
+
+    private String getFileName(Path path) {
+        return path.getFileName().toString();
+    }
+
+    private Stream<Path> getFileList() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("Path clear error", null, e);
+        }
     }
 }
