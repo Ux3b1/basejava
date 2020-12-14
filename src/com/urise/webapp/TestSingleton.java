@@ -1,6 +1,6 @@
 package com.urise.webapp;
 
-import java.io.File;
+import java.io.IOException;
 
 public class TestSingleton {
     private static TestSingleton instance;
@@ -15,7 +15,6 @@ public class TestSingleton {
         return instance;
     }
 
-    public static void main(String[] args) {
-        System.out.println(File.separator);
+    public static void main(String[] args) throws IOException {
     }
 }
