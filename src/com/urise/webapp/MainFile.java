@@ -1,7 +1,5 @@
 package com.urise.webapp;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +46,7 @@ public class MainFile {
         return Integer.parseInt(uniqueValuesLine);
     }
 
-    public static @NotNull List<Integer> oddOrEven(List<Integer> integers) {
+    List<Integer> oddOrEven(List<Integer> integers) {
         Objects.requireNonNull(integers);
         List<Integer> oddIntegers = new ArrayList<>();
         List<Integer> evenIntegers = new ArrayList<>();
