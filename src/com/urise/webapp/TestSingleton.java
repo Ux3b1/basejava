@@ -1,7 +1,5 @@
 package com.urise.webapp;
 
-import java.io.IOException;
-
 public class TestSingleton {
     private static TestSingleton instance;
 
@@ -15,6 +13,7 @@ public class TestSingleton {
         return instance;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+
     }
 }
