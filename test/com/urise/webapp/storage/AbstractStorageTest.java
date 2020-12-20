@@ -3,15 +3,15 @@ package com.urise.webapp.storage;
 import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.*;
+import com.urise.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,10 +19,10 @@ public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.getInstance().getStorageDir();
     protected Storage storage;
 
-    private static final String UUUD_1 = "uuid1";
-    private static final String UUUD_2 = "uuid2";
-    private static final String UUUD_3 = "uuid3";
-    private static final String UUUD_4 = "uuid4";
+    private static final String UUUD_1 = UUID.randomUUID().toString();
+    private static final String UUUD_2 = UUID.randomUUID().toString();
+    private static final String UUUD_3 = UUID.randomUUID().toString();
+    private static final String UUUD_4 = UUID.randomUUID().toString();
 
     private static final Resume R1;
     private static final Resume R2;
@@ -35,7 +35,7 @@ public abstract class AbstractStorageTest {
         R3 = new Resume(UUUD_3, "Name3");
         R4 = new Resume(UUUD_4, "Name4");
 
-        R1.addContact(ContactType.MAIL, "mail1@ya.ru");
+       /* R1.addContact(ContactType.MAIL, "mail1@ya.ru");
         R1.addContact(ContactType.PHONE, "11111");
         R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
@@ -57,7 +57,7 @@ public abstract class AbstractStorageTest {
         R1.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Organization2", "http://Organization2.ru",
-                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));
+                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));*/
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -87,9 +87,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume = new Resume("uuid1", "New Name");
+        Resume resume = new Resume(UUUD_1, "New Name");
         storage.update(resume);
-        Resume resume1 = storage.get("uuid1");
+        Resume resume1 = storage.get(UUUD_1);
         assertEquals(resume, resume1);
     }
 

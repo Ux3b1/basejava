@@ -1,4 +1,4 @@
-package com.urise.webapp.util;
+package com.urise.webapp.sql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
