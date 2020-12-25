@@ -92,28 +92,6 @@ public class SqlStorage implements Storage {
         });
     }
 
-/*    @Override
-    public Resume get(String uuid) {
-        return sqlHelper.execute(
-                "SELECT * FROM resume r" +
-                        " LEFT JOIN contact c" +
-                        "   ON r.uuid = c.resume_uuid " +
-                        "WHERE r.uuid =?",
-                ps -> {
-                    ps.setString(1, uuid);
-                    ResultSet rs = ps.executeQuery();
-                    if (!rs.next()) {
-                        throw new NotExistStorageException(uuid);
-                    }
-                    Resume resume = new Resume(uuid, rs.getString("full_name"));
-                    do {
-                        addContact(rs, resume);
-                    }
-                    while (rs.next());
-                    return resume;
-                });
-    }*/
-
     @Override
     public void delete(String uuid) {
         sqlHelper.<Void>execute("DELETE FROM resume WHERE uuid =?", ps -> {
@@ -166,7 +144,6 @@ public class SqlStorage implements Storage {
             return rs.next() ? rs.getInt(1) : 0;
         });
     }
-
 
     private void insertContacts(Connection conn, Resume resume) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
